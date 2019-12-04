@@ -10,7 +10,7 @@ test:
 	@echo -e '\e[01;34mRunning Go unit tests\e[0m'
 	@go test -cover
 
-release: version.go | test
+release: test
 	go mod tidy
 	@echo "Releasing $(APPNAME) v$(VERSION)"
 	git tag v$(VERSION)
