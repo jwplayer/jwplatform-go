@@ -76,6 +76,10 @@ func main() {
 }
 ```
 
+## Supported operations
+
+All API methods documentated on the API are available in this client. Please refer to our [api documentation](https://developer.jwplayer.com/jwplayer/reference).
+
 ## Test
 
 The test suite needs testify's `assert` package to run:
