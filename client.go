@@ -20,13 +20,14 @@ import (
 	"net/url"
 	"path"
 	"strconv"
+	"strings"
 	"time"
 )
 
 const (
 	APIVersion = "v1"
 	APIHost    = "api.jwplatform.com"
-	Version    = "0.1.0"
+	Version    = "0.2.0"
 )
 
 // Client represents the JWPlatform client object,
@@ -74,14 +75,16 @@ func (c *Client) buildParams(params url.Values) url.Values {
 	if params == nil {
 		params = url.Values{}
 	}
-
 	params.Set("api_nonce", generateNonce())
 	params.Set("api_key", c.apiKey)
 	params.Set("api_format", "json")
 	params.Set("api_timestamp", strconv.FormatInt(makeTimestamp(), 10))
 
 	// hash signature base string
-	sbs := params.Encode() + c.apiSecret
+	sbs := params.Encode()
+	sbs = strings.Replace(sbs, "+", " ", -1)
+	sbs = strings.Replace(sbs, "%7E", "~", -1)
+	sbs = sbs + c.apiSecret
 	h := sha1.New()
 	h.Write([]byte(sbs))
 	sha := hex.EncodeToString(h.Sum(nil))
@@ -108,21 +111,22 @@ func (c *Client) newRequestWithContext(ctx context.Context, method, pathPart str
 }
 
 // do decodes response body into v
-func (c *Client) do(req *http.Request, v interface{}) (*http.Response, error) {
+func (c *Client) do(req *http.Request, v interface{}) error {
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	defer resp.Body.Close()
+
 	err = json.NewDecoder(resp.Body).Decode(v)
-	return resp, err
+	return err
 }
 
 // MakeRequest requests with api signature and decodes json result into v
-func (c *Client) MakeRequest(ctx context.Context, method, pathPart string, params url.Values, v interface{}) (*http.Response, error) {
+func (c *Client) MakeRequest(ctx context.Context, method, pathPart string, params url.Values, v interface{}) error {
 	req, err := c.newRequestWithContext(ctx, method, pathPart, params)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	return c.do(req, &v)

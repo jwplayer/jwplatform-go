@@ -20,7 +20,7 @@ go get -u github.com/jwplayer/jwplatform-go
 module github.com/my/package
 
 require (
-    github.com/jwplayer/jwplatform-go v0.1.0
+    github.com/jwplayer/jwplatform-go v0.2.0
 )
 ```
 
@@ -61,12 +61,57 @@ func main() {
 
   // set URL params
   params := url.Values{}
-  params.Set("video_key", "VIDEO_KEY")
+  params.Set("video_key", "VIDEO_KEY")  // some video key, e.g. gIRtMhYM
 
   // declare an empty interface
   var result map[string]interface{}
 
-  _, err := client.MakeRequest(ctx, http.MethodGet, "/videos/show/", params, &result)
+  err := client.MakeRequest(ctx, http.MethodGet, "/videos/show/", params, &result)
+
+  if err != nil {
+  	log.Fatal(err)
+  }
+
+  fmt.Println(result["status"])  // ok
+}
+```
+
+### Example: Upload video
+
+```go
+package main
+
+import (
+  "context"
+  "fmt"
+  "log"
+  "net/url"
+  "os"
+
+  "github.com/jwplayer/jwplatform-go"
+)
+
+func main() {
+  filepath := "path/to/your/video.mp4"
+
+  ctx, cancel := context.WithCancel(context.Background())
+  defer cancel()
+
+  // set URL params
+  params := url.Values{}
+  params.Set("title", "Your video title")
+  params.Set("description", "Your video description")
+
+  apiKey := os.Getenv("JWPLATFORM_API_KEY")
+  apiSecret := os.Getenv("JWPLATFORM_API_SECRET")
+
+  client := jwplatform.NewClient(apiKey, apiSecret)
+
+  // declare an empty interface
+  var result map[string]interface{}
+
+  // upload video usind direct upload method
+  err := client.Upload(ctx, filepath, params, &result)
 
   if err != nil {
   	log.Fatal(err)
