@@ -19,6 +19,7 @@ import (
 	"net/http"
 	"net/url"
 	"path"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -80,13 +81,30 @@ func (c *Client) buildParams(params url.Values) url.Values {
 	params.Set("api_format", "json")
 	params.Set("api_timestamp", strconv.FormatInt(makeTimestamp(), 10))
 
+	// create sorted keys array
+	var keys []string
+	for k := range params {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	// construct signature base string
+	var sbs strings.Builder
+	for i, k := range keys {
+		if i != 0 {
+			sbs.WriteString("&")
+		}
+		// convert []string to string
+		val := strings.Join(params[k], "")
+		sbs.WriteString(k)
+		sbs.WriteString("=")
+		sbs.WriteString(val)
+	}
+	sbs.WriteString(c.apiSecret)
+
 	// hash signature base string
-	sbs := params.Encode()
-	sbs = strings.Replace(sbs, "+", " ", -1)
-	sbs = strings.Replace(sbs, "%7E", "~", -1)
-	sbs = sbs + c.apiSecret
 	h := sha1.New()
-	h.Write([]byte(sbs))
+	h.Write([]byte(sbs.String()))
 	sha := hex.EncodeToString(h.Sum(nil))
 
 	params.Set("api_signature", sha)
@@ -104,6 +122,7 @@ func (c *Client) newRequestWithContext(ctx context.Context, method, pathPart str
 	if err != nil {
 		return nil, err
 	}
+
 	req.Header.Set("Accept", "application/json")
 	req.Header.Add("User-Agent", c.UserAgent)
 
