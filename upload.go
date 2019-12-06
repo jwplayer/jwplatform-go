@@ -53,6 +53,10 @@ func (c *Client) Upload(ctx context.Context, filepath string, params url.Values,
 		return err
 	}
 
+	if result["status"] != "ok" {
+		return fmt.Errorf("Error creating video: %s", result["message"])
+	}
+
 	link := result["link"].(map[string]interface{})
 
 	// create upload URL
