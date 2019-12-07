@@ -10,6 +10,8 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+
+	"github.com/mitchellh/go-homedir"
 )
 
 // postFile creates a form file and posts it
@@ -22,7 +24,12 @@ func postFile(filename string, targetUrl string) (*http.Response, error) {
 		return nil, err
 	}
 
-	fh, err := os.Open(filename)
+	expanded, err := homedir.Expand(filename)
+	if err != nil {
+		return nil, err
+	}
+
+	fh, err := os.Open(expanded)
 	if err != nil {
 		return nil, err
 	}
@@ -82,6 +89,5 @@ func (c *Client) Upload(ctx context.Context, filepath string, params url.Values,
 	}
 	defer resp.Body.Close()
 
-	err = json.NewDecoder(resp.Body).Decode(v)
-	return err
+	return json.NewDecoder(resp.Body).Decode(v)
 }

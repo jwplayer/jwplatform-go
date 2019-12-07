@@ -94,11 +94,12 @@ func (c *Client) buildParams(params url.Values) url.Values {
 		if i != 0 {
 			sbs.WriteString("&")
 		}
-		// convert []string to string
-		val := strings.Join(params[k], "")
-		sbs.WriteString(k)
-		sbs.WriteString("=")
-		sbs.WriteString(val)
+		// iterate over values of type []string
+		for _, val := range params[k] {
+			sbs.WriteString(k)
+			sbs.WriteString("=")
+			sbs.WriteString(val)
+		}
 	}
 	sbs.WriteString(c.apiSecret)
 
