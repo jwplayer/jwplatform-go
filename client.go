@@ -19,14 +19,16 @@ import (
 	"net/http"
 	"net/url"
 	"path"
+	"sort"
 	"strconv"
+	"strings"
 	"time"
 )
 
 const (
 	APIVersion = "v1"
 	APIHost    = "api.jwplatform.com"
-	Version    = "0.1.0"
+	Version    = "0.2.0"
 )
 
 // Client represents the JWPlatform client object,
@@ -74,16 +76,36 @@ func (c *Client) buildParams(params url.Values) url.Values {
 	if params == nil {
 		params = url.Values{}
 	}
-
 	params.Set("api_nonce", generateNonce())
 	params.Set("api_key", c.apiKey)
 	params.Set("api_format", "json")
 	params.Set("api_timestamp", strconv.FormatInt(makeTimestamp(), 10))
 
+	// create sorted keys array
+	var keys []string
+	for k := range params {
+		keys = append(keys, k)
+	}
+	sort.Strings(keys)
+
+	// construct signature base string
+	var sbs strings.Builder
+	for i, k := range keys {
+		if i != 0 {
+			sbs.WriteString("&")
+		}
+		// iterate over values of type []string
+		for _, val := range params[k] {
+			sbs.WriteString(k)
+			sbs.WriteString("=")
+			sbs.WriteString(val)
+		}
+	}
+	sbs.WriteString(c.apiSecret)
+
 	// hash signature base string
-	sbs := params.Encode() + c.apiSecret
 	h := sha1.New()
-	h.Write([]byte(sbs))
+	h.Write([]byte(sbs.String()))
 	sha := hex.EncodeToString(h.Sum(nil))
 
 	params.Set("api_signature", sha)
@@ -101,6 +123,7 @@ func (c *Client) newRequestWithContext(ctx context.Context, method, pathPart str
 	if err != nil {
 		return nil, err
 	}
+
 	req.Header.Set("Accept", "application/json")
 	req.Header.Add("User-Agent", c.UserAgent)
 
@@ -108,21 +131,22 @@ func (c *Client) newRequestWithContext(ctx context.Context, method, pathPart str
 }
 
 // do decodes response body into v
-func (c *Client) do(req *http.Request, v interface{}) (*http.Response, error) {
+func (c *Client) do(req *http.Request, v interface{}) error {
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
-		return nil, err
+		return err
 	}
 	defer resp.Body.Close()
+
 	err = json.NewDecoder(resp.Body).Decode(v)
-	return resp, err
+	return err
 }
 
 // MakeRequest requests with api signature and decodes json result into v
-func (c *Client) MakeRequest(ctx context.Context, method, pathPart string, params url.Values, v interface{}) (*http.Response, error) {
+func (c *Client) MakeRequest(ctx context.Context, method, pathPart string, params url.Values, v interface{}) error {
 	req, err := c.newRequestWithContext(ctx, method, pathPart, params)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	return c.do(req, &v)
