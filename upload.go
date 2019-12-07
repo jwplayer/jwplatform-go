@@ -24,12 +24,12 @@ func postFile(filename string, targetUrl string) (*http.Response, error) {
 		return nil, err
 	}
 
-	expanded, err := homedir.Expand(filename)
+	abspath, err := homedir.Expand(filename)
 	if err != nil {
 		return nil, err
 	}
 
-	fh, err := os.Open(expanded)
+	fh, err := os.Open(abspath)
 	if err != nil {
 		return nil, err
 	}
