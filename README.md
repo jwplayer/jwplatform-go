@@ -69,7 +69,7 @@ func main() {
   // declare an empty interface
   var result map[string]interface{}
 
-  err := client.MakeReque"gopkg.in/h2non/gock.v1"st(ctx, http.MethodGet, "/videos/show/", params, &result)
+  err := client.MakeRequest(ctx, http.MethodGet, "/videos/show/", params, &result)
 
   if err != nil {
   	log.Fatal(err)
