@@ -15,21 +15,16 @@ import (
 )
 
 // postFile creates a form file and posts it.
-func postFile(filename string, targetUrl string) (*http.Response, error) {
+func postFile(filepath string, targetUrl string) (*http.Response, error) {
 	bodyBuf := &bytes.Buffer{}
 	bodyWriter := multipart.NewWriter(bodyBuf)
 
-	fileWriter, err := bodyWriter.CreateFormFile("file", filename)
+	fileWriter, err := bodyWriter.CreateFormFile("file", filepath)
 	if err != nil {
 		return nil, err
 	}
 
-	abspath, err := homedir.Expand(filename)
-	if err != nil {
-		return nil, err
-	}
-
-	fh, err := os.Open(abspath)
+	fh, err := os.Open(filepath)
 	if err != nil {
 		return nil, err
 	}
@@ -82,8 +77,13 @@ func (c *Client) Upload(ctx context.Context, filepath string, params url.Values,
 	// add query string
 	uploadURL.RawQuery = values.Encode() + "&api_format=json"
 
+	abspath, err := homedir.Expand(filepath)
+	if err != nil {
+		return err
+	}
+
 	// upload file
-	resp, err := postFile(filepath, uploadURL.String())
+	resp, err := postFile(abspath, uploadURL.String())
 	if err != nil {
 		return err
 	}
