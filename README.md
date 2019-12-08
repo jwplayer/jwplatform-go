@@ -1,8 +1,8 @@
-[![Build Status](https://travis-ci.org/jwplayer/jwplatform-go.svg?branch=master)](https://travis-ci.org/jwplayer/jwplatform-go)
-
 # Go JW Platform
 
-Official Go client library for accessing JW Platform API.
+[![Build Status](https://travis-ci.org/jwplayer/jwplatform-go.svg?branch=master)](https://travis-ci.org/jwplayer/jwplatform-go)
+
+The official Go client library for accessing the [JW Platform](https://www.jwplayer.com/video-delivery/) API.
 
 ## Requirements
 
