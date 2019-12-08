@@ -33,25 +33,25 @@ func TestClient_BuildParams(t *testing.T) {
 func TestClient_MakeRequest(t *testing.T) {
 	defer gock.Off() // Flush pending mocks after test execution
 
-  gock.New("https://api.jwplatform.com").
-    Get("/v1/videos/show").
+	gock.New("https://api.jwplatform.com").
+		Get("/v1/videos/show").
 		MatchParam("video_key", "VIDEO_KEY").
-    Reply(200).
-    JSON(map[string]string{"status": "ok"})
+		Reply(200).
+		JSON(map[string]string{"status": "ok"})
 
 	ctx, cancel := context.WithCancel(context.Background())
-  defer cancel()
+	defer cancel()
 
-  client := NewClient("API_KEY", "API_SECRET")
+	client := NewClient("API_KEY", "API_SECRET")
 
-  // set URL params
-  params := url.Values{}
-  params.Set("video_key", "VIDEO_KEY")  // some video key, e.g. gIRtMhYM
+	// set URL params
+	params := url.Values{}
+	params.Set("video_key", "VIDEO_KEY") // some video key, e.g. gIRtMhYM
 
-  // declare an empty interface
-  var result map[string]interface{}
+	// declare an empty interface
+	var result map[string]interface{}
 
-  client.MakeRequest(ctx, http.MethodGet, "/videos/show/", params, &result)
+	client.MakeRequest(ctx, http.MethodGet, "/videos/show/", params, &result)
 
 	assert.Equal(t, result["status"], "ok")
 }
