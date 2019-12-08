@@ -1,6 +1,9 @@
 # Go JW Platform
 
-Official Go client library for accessing JW Platform API.
+[![GoDoc](http://img.shields.io/badge/godoc-reference-blue.svg)](http://godoc.org/github.com/jwplayer/jwplatform-go)
+[![Build Status](https://travis-ci.org/jwplayer/jwplatform-go.svg?branch=master)](https://travis-ci.org/jwplayer/jwplatform-go)
+
+The official Go client library for accessing the [JW Platform](https://www.jwplayer.com/video-delivery/) API.
 
 ## Requirements
 
