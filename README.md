@@ -66,7 +66,7 @@ func main() {
   // declare an empty interface
   var result map[string]interface{}
 
-  err := client.MakeRequest(ctx, http.MethodGet, "/videos/show/", params, &result)
+  err := client.MakeReque"gopkg.in/h2non/gock.v1"st(ctx, http.MethodGet, "/videos/show/", params, &result)
 
   if err != nil {
   	log.Fatal(err)
@@ -126,10 +126,6 @@ func main() {
 All API methods documentated on the API are available in this client. Please refer to our [api documentation](https://developer.jwplayer.com/jwplayer/reference).
 
 ## Test
-
-The test suite needs testify's `assert` package to run:
-
-    github.com/stretchr/testify/assert
 
 Before running the tests, make sure to grab all of the package's dependencies:
 

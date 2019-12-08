@@ -4,6 +4,8 @@ before_install:
 
   # The testify require framework is used for assertions in the test suite
   - travis_retry go get -u github.com/stretchr/testify/require
+  - travis_retry go get -u github.com/Flaque/filet
+  - travis_retry go get -u gopkg.in/h2non/gock.v1
 
 go:
   - "1.13.x"
