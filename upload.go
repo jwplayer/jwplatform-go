@@ -14,7 +14,7 @@ import (
 	"github.com/mitchellh/go-homedir"
 )
 
-// postFile creates a form file and posts it
+// postFile creates a form file and posts it.
 func postFile(filename string, targetUrl string) (*http.Response, error) {
 	bodyBuf := &bytes.Buffer{}
 	bodyWriter := multipart.NewWriter(bodyBuf)
@@ -50,7 +50,7 @@ func postFile(filename string, targetUrl string) (*http.Response, error) {
 	return resp, nil
 }
 
-// Upload posts a file using the direct upload method
+// Upload posts a file using the direct upload method.
 func (c *Client) Upload(ctx context.Context, filepath string, params url.Values, v interface{}) error {
 	// declare an empty interface
 	var result map[string]interface{}

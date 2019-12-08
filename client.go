@@ -31,7 +31,7 @@ const (
 	Version    = "0.2.0"
 )
 
-// Client represents the JWPlatform client object,
+// Client represents the JWPlatform client object.
 type Client struct {
 	APIVersion string
 	BaseURL    *url.URL
@@ -113,7 +113,7 @@ func (c *Client) buildParams(params url.Values) url.Values {
 	return params
 }
 
-// newRequestWithContext create a new request with signed params
+// newRequestWithContext creates a new request with signed params.
 func (c *Client) newRequestWithContext(ctx context.Context, method, pathPart string, params url.Values) (*http.Request, error) {
 	rel := &url.URL{Path: path.Join(c.APIVersion, pathPart)}
 	absoluteURL := c.BaseURL.ResolveReference(rel)
@@ -130,7 +130,7 @@ func (c *Client) newRequestWithContext(ctx context.Context, method, pathPart str
 	return req, nil
 }
 
-// do decodes response body into v
+// do executes request and decodes response body.
 func (c *Client) do(req *http.Request, v interface{}) error {
 	resp, err := c.httpClient.Do(req)
 	if err != nil {
@@ -141,7 +141,7 @@ func (c *Client) do(req *http.Request, v interface{}) error {
 	return json.NewDecoder(resp.Body).Decode(v)
 }
 
-// MakeRequest requests with api signature and decodes json result into v
+// MakeRequest requests with api signature and decodes json result.
 func (c *Client) MakeRequest(ctx context.Context, method, pathPart string, params url.Values, v interface{}) error {
 	req, err := c.newRequestWithContext(ctx, method, pathPart, params)
 	if err != nil {
