@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/jwplayer/jwplatform-go.svg?branch=master)](https://travis-ci.org/jwplayer/jwplatform-go)
+
 # Go JW Platform
 
 Official Go client library for accessing JW Platform API.
