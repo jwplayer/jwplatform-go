@@ -51,6 +51,7 @@ func (c *Client) Upload(ctx context.Context, filepath string, params url.Values,
 	var result map[string]interface{}
 
 	err := c.MakeRequest(ctx, http.MethodPost, "/videos/create/", params, &result)
+
 	if err != nil {
 		return err
 	}

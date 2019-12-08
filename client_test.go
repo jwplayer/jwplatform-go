@@ -22,16 +22,16 @@ func TestClient_BuildParams(t *testing.T) {
 	m, err := url.ParseQuery(rawQuery)
 
 	assert.Nil(t, err)
-	assert.Equal(t, m["api_format"], []string{"json"})
-	assert.Equal(t, m["api_key"], []string{"API_KEY"})
-	assert.Equal(t, m["video_key"], []string{"VIDEO_KEY"})
+	assert.Equal(t, []string{"json"}, m["api_format"])
+	assert.Equal(t, []string{"API_KEY"}, m["api_key"])
+	assert.Equal(t, []string{"VIDEO_KEY"}, m["video_key"])
 	assert.Contains(t, m, "api_nonce")
 	assert.Contains(t, m, "api_signature")
 	assert.Contains(t, m, "api_timestamp")
 }
 
 func TestClient_MakeRequest(t *testing.T) {
-	defer gock.Off() // Flush pending mocks after test execution
+	defer gock.Off() // flush pending mocks after test execution
 
 	gock.New("https://api.jwplatform.com").
 		Get("/v1/videos/show").
@@ -53,5 +53,5 @@ func TestClient_MakeRequest(t *testing.T) {
 
 	client.MakeRequest(ctx, http.MethodGet, "/videos/show/", params, &result)
 
-	assert.Equal(t, result["status"], "ok")
+	assert.Equal(t, "ok", result["status"])
 }
