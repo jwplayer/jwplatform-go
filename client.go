@@ -1,5 +1,5 @@
 /*
-Package jwplatform provides a client to talk to the JW Platform API,
+Package jwplatform provides a client to talk to the JW Platform API.
 
 		import (
 		  "github.com/jwplayer/jwplatform-go"
