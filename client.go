@@ -138,8 +138,7 @@ func (c *Client) do(req *http.Request, v interface{}) error {
 	}
 	defer resp.Body.Close()
 
-	err = json.NewDecoder(resp.Body).Decode(v)
-	return err
+	return json.NewDecoder(resp.Body).Decode(v)
 }
 
 // MakeRequest requests with api signature and decodes json result into v
