@@ -113,7 +113,7 @@ func main() {
   // declare an empty interface
   var result map[string]interface{}
 
-  // upload video usind direct upload method
+  // upload video using direct upload method
   err := client.Upload(ctx, filepath, params, &result)
 
   if err != nil {
