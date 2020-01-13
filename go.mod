@@ -1,4 +1,4 @@
-module github.com/jwplayer/jwplayer-go
+module github.com/jwplayer/jwplatform-go
 
 go 1.13
 
