@@ -23,7 +23,7 @@ go get -u github.com/jwplayer/jwplatform-go
 module github.com/my/package
 
 require (
-    github.com/jwplayer/jwplatform-go v0.2.0
+    github.com/jwplayer/jwplatform-go v0.3.0
 )
 ```
 
