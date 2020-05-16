@@ -1,5 +1,10 @@
 # Changelog
 
+0.3.0 (ksindi)
+--------------
+
+* Fix go mod conflict
+
 0.2.0 (ksindi)
 --------------
 
