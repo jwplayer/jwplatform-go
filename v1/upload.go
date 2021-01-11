@@ -1,4 +1,4 @@
-package jwplatform
+package v1
 
 import (
 	"bytes"
@@ -15,7 +15,7 @@ import (
 )
 
 // postFile creates a form file and posts it.
-func postFile(filepath string, targetUrl string) (*http.Response, error) {
+func postFile(filepath string, targetURL string) (*http.Response, error) {
 	bodyBuf := &bytes.Buffer{}
 	bodyWriter := multipart.NewWriter(bodyBuf)
 
@@ -37,12 +37,7 @@ func postFile(filepath string, targetUrl string) (*http.Response, error) {
 	contentType := bodyWriter.FormDataContentType()
 	bodyWriter.Close()
 
-	resp, err := http.Post(targetUrl, contentType, bodyBuf)
-	if err != nil {
-		return nil, err
-	}
-
-	return resp, nil
+	return http.Post(targetURL, contentType, bodyBuf)
 }
 
 // Upload posts a file using the direct upload method.
@@ -63,7 +58,7 @@ func (c *Client) Upload(ctx context.Context, filepath string, params url.Values,
 	link := result["link"].(map[string]interface{})
 
 	// create upload URL
-	uploadURL, err := url.Parse("https://" + fmt.Sprintf("%v", link["address"]) + fmt.Sprintf("%v", link["path"]))
+	uploadURL, err := url.Parse("https://" + fmt.Sprintf("%v%v", link["address"], link["path"]))
 	if err != nil {
 		return err
 	}
