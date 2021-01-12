@@ -10,7 +10,7 @@ import (
 	"strconv"
 )
 
-// V2Client is a light wrapper around the http.defaultClient for interacting with JW Player V2 Platform API's
+// V2Client is a light wrapper around the http.defaultClient for interacting with JW Player V2 Platform APIs
 type V2Client struct {
 	Version   string
 	authToken string

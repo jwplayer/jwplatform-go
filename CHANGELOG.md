@@ -3,7 +3,7 @@
 1.0.0 (boyntoni)
 ----------------
 
-* Add client for JW Player V2 API's
+* Add client for JW Player V2 APIs
 * Former client now accessible under the `v1` namespace
 
 0.3.0 (ksindi)

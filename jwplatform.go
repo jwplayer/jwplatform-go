@@ -39,7 +39,7 @@ Sample Usage:
 
 package jwplatform
 
-// JWPlatform client for interacting with JW Player V2 Platform API's.
+// JWPlatform client for interacting with JW Player V2 Platform APIs.
 type JWPlatform struct {
 	Version       string
 	Analytics     *AnalyticsClient
@@ -51,7 +51,7 @@ type JWPlatform struct {
 	Webhooks      *WebhooksClient
 }
 
-// New generates an authenticated client for interacting with JW Player V2 Platform API's.
+// New generates an authenticated client for interacting with JW Player V2 Platform APIs.
 func New(apiSecret string) *JWPlatform {
 	v2Client := NewV2Client(apiSecret)
 	channelsClient := NewChannelsClient(v2Client)
