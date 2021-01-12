@@ -18,28 +18,28 @@ import (
 )
 
 jwplatform := jwplatform.New("API_SECRET")
-mySiteId := "9kzNUpe4"
-mediaId := "LaJFzc9d"
+siteID := "9kzNUpe4"
+mediaID := "LaJFzc9d"
 
 // Get a Resource
-media, err := jwplatform.Media.Get(mySiteId, mediaId)
+media, err := jwplatform.Media.Get(siteID, mediaID)
 
 // Create a Resource
 mediaToCreate := &jwplatform.MediaMetadata(Title: "My new video")
-media, err := jwplatform.Media.Create(mySiteId, mediaToCreate)
+media, err := jwplatform.Media.Create(siteID, mediaToCreate)
 
 // List a Resource
-mediaResources, err := jwplatform.Media.List(mySiteId, nil)
+mediaResources, err := jwplatform.Media.List(siteID, nil)
 // Optionally include query parameters, including page, page length, sort, and filters.
 params := jwplatform.QueryParams{Page: 2, PageLength: 5}
-mediaResources, err := jwplatform.Media.List(mySiteId, params)
+mediaResources, err := jwplatform.Media.List(siteID, params)
 
 // Update a Resource
 updateMetadata := &jwplatform.MediaMetadata{Title: "Updated video title"}
-updatedMedia, err := jwplatform.Media.Update(mySiteId, mediaId, updateMetadata)
+updatedMedia, err := jwplatform.Media.Update(siteID, mediaID, updateMetadata)
 
 // Delete a Resource
-_ := jwplatform.Media.Delete(mySiteId, mediaId)
+_ := jwplatform.Media.Delete(siteID, mediaID)
 ```
 
 ## Supported operations
