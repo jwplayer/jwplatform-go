@@ -3,6 +3,8 @@ package jwplatform
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/google/go-querystring/query"
 )
 
 // ChannelResource is the resource that is returned for all Channel resource requests
@@ -102,7 +104,8 @@ func (c *ChannelsClient) Create(siteID string, ChannelCreateMetadata *ChannelCre
 func (c *ChannelsClient) List(siteID string, queryParams *QueryParams) (*ChannelResourcesResponse, error) {
 	channels := &ChannelResourcesResponse{}
 	path := fmt.Sprintf("/v2/sites/%s/channels", siteID)
-	err := c.v2Client.Request(http.MethodGet, path, channels, nil, queryParams)
+	urlValues, _ := query.Values(queryParams)
+	err := c.v2Client.Request(http.MethodGet, path, channels, nil, urlValues)
 	return channels, err
 }
 

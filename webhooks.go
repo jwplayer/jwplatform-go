@@ -3,6 +3,8 @@ package jwplatform
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/google/go-querystring/query"
 )
 
 // WebhookResource is the resource that is returned for all Webhook resource requests,
@@ -67,7 +69,8 @@ func (c *WebhooksClient) Create(webhookMetadata *WebhookMetadata) (*CreateWebhoo
 // List all Webhook resources.
 func (c *WebhooksClient) List(queryParams *QueryParams) (*WebhookResourcesResponse, error) {
 	webhooks := &WebhookResourcesResponse{}
-	err := c.v2Client.Request(http.MethodGet, "/v2/webhooks", webhooks, nil, queryParams)
+	urlValues, _ := query.Values(queryParams)
+	err := c.v2Client.Request(http.MethodGet, "/v2/webhooks", webhooks, nil, urlValues)
 	return webhooks, err
 }
 

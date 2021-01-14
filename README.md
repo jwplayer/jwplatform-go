@@ -61,4 +61,4 @@ pull request][pulls].
 
 ## V1 Client
 
-The V1 Client remains available for use, but is deprecated. We strongly recommend using the V2 Client. For documentation on the V1 client, please refer to the `v1` submodule.
+The V1 Client remains available for use, but is deprecated. We strongly recommend using the V2 Client. For documentation on the V1 Client, please refer to the `v1` submodule.

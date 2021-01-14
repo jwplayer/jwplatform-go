@@ -3,6 +3,8 @@ package jwplatform
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/google/go-querystring/query"
 )
 
 // ImportResource is the resource that is returned for all Import resource requests,
@@ -86,7 +88,8 @@ func (c *ImportsClient) Create(siteID string, importMetadata *ImportMetadata) (*
 func (c *ImportsClient) List(siteID string, queryParams *QueryParams) (*ImportResourcesResponse, error) {
 	importResources := &ImportResourcesResponse{}
 	path := fmt.Sprintf("/v2/sites/%s/imports", siteID)
-	err := c.v2Client.Request(http.MethodGet, path, importResources, nil, queryParams)
+	urlValues, _ := query.Values(queryParams)
+	err := c.v2Client.Request(http.MethodGet, path, importResources, nil, urlValues)
 	return importResources, err
 }
 

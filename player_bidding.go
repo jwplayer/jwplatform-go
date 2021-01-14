@@ -3,6 +3,8 @@ package jwplatform
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/google/go-querystring/query"
 )
 
 // PlayerBiddingConfigurationResource is the resource that is returned for all Player Bidding Configuration resource requests,
@@ -83,7 +85,8 @@ func (c *PlayerBiddingClient) Create(siteID string, PlayerBiddingConfigurationMe
 func (c *PlayerBiddingClient) List(siteID string, queryParams *QueryParams) (*PlayerBiddingConfigurationResourcesResponse, error) {
 	playerBiddingConfigs := &PlayerBiddingConfigurationResourcesResponse{}
 	path := fmt.Sprintf("/v2/sites/%s/vpb_configs", siteID)
-	err := c.v2Client.Request(http.MethodGet, path, playerBiddingConfigs, nil, queryParams)
+	urlValues, _ := query.Values(queryParams)
+	err := c.v2Client.Request(http.MethodGet, path, playerBiddingConfigs, nil, urlValues)
 	return playerBiddingConfigs, err
 }
 

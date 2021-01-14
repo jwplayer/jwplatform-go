@@ -3,13 +3,14 @@ package jwplatform
 import (
 	"fmt"
 	"net/http"
-	"strings"
+
+	"github.com/google/go-querystring/query"
 )
 
 // AnalyticsQueryParameters define the allowed parameters on the Query action.
 type AnalyticsQueryParameters struct {
-	Source string
-	Format string
+	Source string	`url:"source"`
+	Format string	`url:"format"`
 }
 
 // AnalyticsResponse is the structure returned via the Query action.
@@ -46,17 +47,7 @@ type AnalyticsClient struct {
 func (c *AnalyticsClient) Query(siteID string, queryParams *AnalyticsQueryParameters) (*AnalyticsResponse, error) {
 	analyticResponse := &AnalyticsResponse{}
 	path := fmt.Sprintf("/v2/sites/%s/analytics/queries", siteID)
-	if queryParams != nil {
-		path += "?"
-		var pathParams []string
-		if queryParams.Source != "" {
-			pathParams = append(pathParams, fmt.Sprintf("source=%s", queryParams.Source))
-		}
-		if queryParams.Format != "" {
-			pathParams = append(pathParams, fmt.Sprintf("format=%s", queryParams.Format))
-		}
-		path += strings.Join(pathParams, "&")
-	}
-	err := c.v2Client.Request(http.MethodPost, path, analyticResponse, nil, nil)
+	urlValues, _ := query.Values(queryParams)
+	err := c.v2Client.Request(http.MethodPost, path, analyticResponse, nil, urlValues)
 	return analyticResponse, err
 }

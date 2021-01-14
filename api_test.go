@@ -3,43 +3,19 @@ package jwplatform
 import (
 	"encoding/json"
 	"fmt"
-	"net/url"
 	"testing"
 	
 	"github.com/stretchr/testify/assert"
 	"gopkg.in/h2non/gock.v1"
 )
 
-func TestConstructQuery(t *testing.T) {
-	newQueryParams := &QueryParams{
-		Page:       7,
-		PageLength: 11,
-		Sort:       "created:dsc",
-	}
-	expectedQsString := "page=7&page_length=11&sort=created%3Adsc"
-
-	urlValues := &url.Values{}
-	result := constructQuery(urlValues, newQueryParams)
-	assert.Equal(t, expectedQsString, result)
-}
-
-func TestConstructPartialQuery(t *testing.T) {
-	newQueryParams := &QueryParams{
-		PageLength: 23,
-	}
-	expectedQsString := "page_length=23"
-
-	urlValues := &url.Values{}
-	result := constructQuery(urlValues, newQueryParams)
-	assert.Equal(t, expectedQsString, result)
-}
 
 func TestUrlFromPath(t *testing.T) {
 	client := NewV2Client("authToken")
 	path := "/v2/sites/abc/media/123"
 	expected := "https://api.jwplayer.com/v2/sites/abc/media/123"
-	resultUrl, _ := client.urlFromPath(path)
-	assert.Equal(t, resultUrl.String(), expected)
+	resultURL, _ := client.urlFromPath(path)
+	assert.Equal(t, resultURL.String(), expected)
 }
 
 func TestInvalidBody(t *testing.T) {

@@ -3,6 +3,8 @@ package jwplatform
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/google/go-querystring/query"
 )
 
 // EventResource is the resource that is returned for all Event resource requests,
@@ -42,7 +44,8 @@ func (c *EventsClient) Get(siteID, channelID, eventID string) (*EventResource, e
 func (c *EventsClient) List(siteID, channelID string, queryParams *QueryParams) (*EventResourcesResponse, error) {
 	channels := &EventResourcesResponse{}
 	path := fmt.Sprintf("/v2/sites/%s/channels/%s/events", siteID, channelID)
-	err := c.v2Client.Request(http.MethodGet, path, channels, nil, queryParams)
+	urlValues, _ := query.Values(queryParams)
+	err := c.v2Client.Request(http.MethodGet, path, channels, nil, urlValues)
 	return channels, err
 }
 

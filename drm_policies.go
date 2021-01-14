@@ -3,6 +3,8 @@ package jwplatform
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/google/go-querystring/query"
 )
 
 // DRMPolicyResource is the resource that is returned for all DRM Policy resource requests
@@ -61,7 +63,8 @@ func (c *DRMPoliciesClient) Create(siteID string, DRMPolicyMetadata *DRMPolicyMe
 func (c *DRMPoliciesClient) List(siteID string, queryParams *QueryParams) (*DRMPolicyResourcesResponse, error) {
 	drmPolicies := &DRMPolicyResourcesResponse{}
 	path := fmt.Sprintf("/v2/sites/%s/drm_policies", siteID)
-	err := c.v2Client.Request(http.MethodGet, path, drmPolicies, nil, queryParams)
+	urlValues, _ := query.Values(queryParams)
+	err := c.v2Client.Request(http.MethodGet, path, drmPolicies, nil, urlValues)
 	return drmPolicies, err
 }
 

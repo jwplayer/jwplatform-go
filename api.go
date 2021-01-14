@@ -7,7 +7,6 @@ import (
 	"io"
 	"net/http"
 	"net/url"
-	"strconv"
 )
 
 // V2Client is a light wrapper around the http.defaultClient for interacting with JW Player V2 Platform APIs
@@ -36,10 +35,10 @@ type V2ResourceResponse struct {
 
 // QueryParams that can be specified on all resource list calls.
 type QueryParams struct {
-	PageLength int
-	Page       int
-	Query      string
-	Sort       string
+	PageLength int		`url:"page_length"`
+	Page       int		`url:"page"`
+	Query      string	`url:"q"`
+	Sort       string	`url:"sort"`
 }
 
 // JWErrorResponse represents a V2 Platform error response.
@@ -82,14 +81,12 @@ func NewV2Client(authToken string) *V2Client {
 }
 
 // Request performs an authenticated HTTP request to the V2 Platform API.
-func (c *V2Client) Request(method, path string, response interface{}, data interface{}, queryParams *QueryParams) error {
+func (c *V2Client) Request(method, path string, response interface{}, data interface{}, queryParams url.Values) error {
 	var err error
 	requestURL, err := c.urlFromPath(path)
 
 	if queryParams != nil {
-		q := requestURL.Query()
-		requestQuery := constructQuery(&q, queryParams)
-		requestURL.RawQuery = requestQuery
+		requestURL.RawQuery = queryParams.Encode()
 	}
 
 	payload := []byte{}
@@ -141,21 +138,4 @@ func (c *V2Client) urlFromPath(path string) (*url.URL, error) {
 	url, e := url.Parse(path)
 	absoluteURL := c.baseURL.ResolveReference(url)
 	return absoluteURL, e
-}
-
-func constructQuery(q *url.Values, queryParams *QueryParams) string {
-	if queryParams.Page != 0 {
-		q.Add("page", strconv.Itoa(queryParams.Page))
-	}
-	if queryParams.PageLength != 0 {
-		q.Add("page_length", strconv.Itoa(queryParams.PageLength))
-	}
-	if queryParams.Sort != "" {
-		q.Add("sort", queryParams.Sort)
-	}
-	if queryParams.Query != "" {
-		q.Add("q", queryParams.Query)
-	}
-
-	return q.Encode()
 }

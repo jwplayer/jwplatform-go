@@ -3,6 +3,8 @@ package jwplatform
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/google/go-querystring/query"
 )
 
 // MediaResource is the resource that is returned for all Media resource requests,
@@ -118,7 +120,8 @@ func (c *MediaClient) Create(siteID string, mediaMetadata *MediaMetadata) (*Crea
 func (c *MediaClient) List(siteID string, queryParams *QueryParams) (*MediaResourcesResponse, error) {
 	media := &MediaResourcesResponse{}
 	path := fmt.Sprintf("/v2/sites/%s/media", siteID)
-	err := c.v2Client.Request(http.MethodGet, path, media, nil, queryParams)
+	urlValues, _ := query.Values(queryParams)
+	err := c.v2Client.Request(http.MethodGet, path, media, nil, urlValues)
 	return media, err
 }
 
