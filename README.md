@@ -7,126 +7,44 @@ The official Go client library for accessing the [JW Platform](https://www.jwpla
 
 ## Requirements
 
-Go 1.13+
-
-## Installation
-
-Install jwplatform-go with:
-
-```sh
-go get -u github.com/jwplayer/jwplatform-go
-```
-
-### Using Go modules
-
-``` go
-module github.com/my/package
-
-require (
-    github.com/jwplayer/jwplatform-go v0.3.0
-)
-```
+Go 1.15+
 
 ## Usage
 
 ```go
 import (
   "github.com/jwplayer/jwplatform-go"
+  "github.com/jwplayer/jwplatform-go/media"
 )
 
-client := jwplatform.NewClient("API_KEY", "API_SECRET")
-```
+jwplatform := jwplatform.New("API_SECRET")
+siteID := "9kzNUpe4"
+mediaID := "LaJFzc9d"
 
-### Example: Get video metadata
+// Get a Resource
+media, err := jwplatform.Media.Get(siteID, mediaID)
 
-```go
-package main
+// Create a Resource
+mediaToCreate := &jwplatform.MediaMetadata(Title: "My new video")
+media, err := jwplatform.Media.Create(siteID, mediaToCreate)
 
-import (
-  "context"
-  "fmt"
-  "log"
-  "net/http"
-  "net/url"
-  "os"
+// List a Resource
+mediaResources, err := jwplatform.Media.List(siteID, nil)
+// Optionally include query parameters, including page, page length, sort, and filters.
+params := jwplatform.QueryParams{Page: 2, PageLength: 5}
+mediaResources, err := jwplatform.Media.List(siteID, params)
 
-  "github.com/jwplayer/jwplatform-go"
-)
+// Update a Resource
+updateMetadata := &jwplatform.MediaMetadata{Title: "Updated video title"}
+updatedMedia, err := jwplatform.Media.Update(siteID, mediaID, updateMetadata)
 
-func main() {
-  ctx, cancel := context.WithCancel(context.Background())
-  defer cancel()
-
-  apiKey := os.Getenv("JWPLATFORM_API_KEY")
-  apiSecret := os.Getenv("JWPLATFORM_API_SECRET")
-
-  client := jwplatform.NewClient(apiKey, apiSecret)
-
-  // set URL params
-  params := url.Values{}
-  params.Set("video_key", "VIDEO_KEY")  // some video key, e.g. gIRtMhYM
-
-  // declare an empty interface
-  var result map[string]interface{}
-
-  err := client.MakeRequest(ctx, http.MethodGet, "/videos/show/", params, &result)
-
-  if err != nil {
-  	log.Fatal(err)
-  }
-
-  fmt.Println(result["status"])  // ok
-}
-```
-
-### Example: Upload video
-
-```go
-package main
-
-import (
-  "context"
-  "fmt"
-  "log"
-  "net/url"
-  "os"
-
-  "github.com/jwplayer/jwplatform-go"
-)
-
-func main() {
-  filepath := "path/to/your/video.mp4"
-
-  ctx, cancel := context.WithCancel(context.Background())
-  defer cancel()
-
-  // set URL params
-  params := url.Values{}
-  params.Set("title", "Your video title")
-  params.Set("description", "Your video description")
-
-  apiKey := os.Getenv("JWPLATFORM_API_KEY")
-  apiSecret := os.Getenv("JWPLATFORM_API_SECRET")
-
-  client := jwplatform.NewClient(apiKey, apiSecret)
-
-  // declare an empty interface
-  var result map[string]interface{}
-
-  // upload video using direct upload method
-  err := client.Upload(ctx, filepath, params, &result)
-
-  if err != nil {
-  	log.Fatal(err)
-  }
-
-  fmt.Println(result["status"])  // ok
-}
+// Delete a Resource
+_ := jwplatform.Media.Delete(siteID, mediaID)
 ```
 
 ## Supported operations
 
-All API methods documentated on the API are available in this client. Please refer to our [api documentation](https://developer.jwplayer.com/jwplayer/reference).
+All API methods documentated on the API are available in this client. Please refer to our [api documentation](https://developer.jwplayer.com/jwplayer/reference#introduction-to-api-v2).
 
 ## Test
 
@@ -141,7 +59,6 @@ Run all tests:
 For any requests, bug or comments, please [open an issue][issues] or [submit a
 pull request][pulls].
 
-## License
+## V1 Client
 
-JW Platform API Go library is distributed under the
-[Apache v2.0 license](LICENSE).
+The V1 Client remains available for use, but is deprecated. We strongly recommend using the V2 Client. For documentation on the V1 Client, please refer to the `v1` submodule.

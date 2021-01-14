@@ -1,13 +1,13 @@
 /*
-Package jwplatform provides a client to talk to the JW Platform API.
+Deprecated package providing a client to talk to the V1 JW Platform API.
 
 		import (
-		  "github.com/jwplayer/jwplatform-go"
+		  "github.com/jwplayer/jwplatform-go/v1"
 		)
 
-		client := jwplatform.NewClient("API_KEY", "API_SECRET")
+		client := v1.NewClient("API_KEY", "API_SECRET")
 */
-package jwplatform
+package v1
 
 import (
 	"context"
@@ -25,35 +25,27 @@ import (
 	"time"
 )
 
-const (
-	APIVersion = "v1"
-	APIHost    = "api.jwplatform.com"
-	Version    = "0.2.0"
-)
+const version = "1.0.0"
 
-// Client represents the JWPlatform client object.
+// Client represents the JWPlatform v1 client object.
 type Client struct {
 	APIVersion string
-	BaseURL    *url.URL
-	UserAgent  string
 	Version    string
-
+	BaseURL    *url.URL
 	apiKey     string
 	apiSecret  string
 	httpClient *http.Client
 }
 
-// NewClient creates a new client object.
+// NewClient creates a V1 new client object.
 func NewClient(apiKey string, apiSecret string) *Client {
 	return &Client{
-		APIVersion: APIVersion,
+		APIVersion: "v1",
+		Version:    version,
 		BaseURL: &url.URL{
 			Scheme: "https",
-			Host:   APIHost,
+			Host:   "api.jwplatform.com",
 		},
-		UserAgent: fmt.Sprintf("jwplatform-go/%s", Version),
-		Version:   Version,
-
 		apiKey:     apiKey,
 		apiSecret:  apiSecret,
 		httpClient: http.DefaultClient,
@@ -124,8 +116,10 @@ func (c *Client) newRequestWithContext(ctx context.Context, method, pathPart str
 		return nil, err
 	}
 
+	userAgent := fmt.Sprintf("jwplatform-go/%s", c.Version)
+
 	req.Header.Set("Accept", "application/json")
-	req.Header.Add("User-Agent", c.UserAgent)
+	req.Header.Add("User-Agent", userAgent)
 
 	return req, nil
 }
