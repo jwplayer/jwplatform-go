@@ -45,8 +45,8 @@ func (c *MediaProtectionRulesClient) Get(siteID, protectionRuleID string) (*Medi
 }
 
 // Create a Media Protection Rule resource.
-func (c *MediaProtectionRulesClient) Create(siteID string, MediaProtectionRuleMetadata *MediaProtectionRuleMetadata) (*MediaProtectionRuleResource, error) {
-	createRequestData := &MediaProtectionRuleWriteRequest{Metadata: *MediaProtectionRuleMetadata}
+func (c *MediaProtectionRulesClient) Create(siteID string, mediaProtectionRuleMetadata *MediaProtectionRuleMetadata) (*MediaProtectionRuleResource, error) {
+	createRequestData := &MediaProtectionRuleWriteRequest{Metadata: *mediaProtectionRuleMetadata}
 	mediaProtectionRule := &MediaProtectionRuleResource{}
 	path := fmt.Sprintf("/v2/sites/%s/media_protection_rules", siteID)
 	err := c.v2Client.Request(http.MethodPost, path, mediaProtectionRule, createRequestData, nil)
@@ -63,8 +63,8 @@ func (c *MediaProtectionRulesClient) List(siteID string, queryParams *QueryParam
 }
 
 // Update a Media Protection Rule resource by ID.
-func (c *MediaProtectionRulesClient) Update(siteID, protectionRuleID string, MediaProtectionRuleMetadata *MediaProtectionRuleMetadata) (*MediaProtectionRuleResource, error) {
-	updateRequestData := &MediaProtectionRuleWriteRequest{Metadata: *MediaProtectionRuleMetadata}
+func (c *MediaProtectionRulesClient) Update(siteID, protectionRuleID string, mediaProtectionRuleMetadata *MediaProtectionRuleMetadata) (*MediaProtectionRuleResource, error) {
+	updateRequestData := &MediaProtectionRuleWriteRequest{Metadata: *mediaProtectionRuleMetadata}
 	mediaProtectionRule := &MediaProtectionRuleResource{}
 	path := fmt.Sprintf("/v2/sites/%s/media_protection_rules/%s", siteID, protectionRuleID)
 	err := c.v2Client.Request(http.MethodPatch, path, mediaProtectionRule, updateRequestData, nil)
