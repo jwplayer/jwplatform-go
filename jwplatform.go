@@ -41,14 +41,15 @@ package jwplatform
 
 // JWPlatform client for interacting with JW Player V2 Platform APIs.
 type JWPlatform struct {
-	Version       string
-	Analytics     *AnalyticsClient
-	Channels      *ChannelsClient
-	DRMPolicies   *DRMPoliciesClient
-	Imports       *ImportsClient
-	Media         *MediaClient
-	PlayerBidding *PlayerBiddingClient
-	Webhooks      *WebhooksClient
+	Version            string
+	Analytics          *AnalyticsClient
+	Channels           *ChannelsClient
+	DRMPolicies        *DRMPoliciesClient
+	Imports            *ImportsClient
+	Media              *MediaClient
+	PlayerBidding      *PlayerBiddingClient
+	Webhooks           *WebhooksClient
+	SiteProtectionRule *SiteProtectionRuleClient
 }
 
 // New generates an authenticated client for interacting with JW Player V2 Platform APIs.
@@ -56,14 +57,15 @@ func New(apiSecret string) *JWPlatform {
 	v2Client := NewV2Client(apiSecret)
 	channelsClient := NewChannelsClient(v2Client)
 	return &JWPlatform{
-		Version:       version,
-		Analytics:     &AnalyticsClient{v2Client: v2Client},
-		Channels:      channelsClient,
-		DRMPolicies:   &DRMPoliciesClient{v2Client: v2Client},
-		Imports:       &ImportsClient{v2Client: v2Client},
-		Media:         &MediaClient{v2Client: v2Client},
-		PlayerBidding: &PlayerBiddingClient{v2Client: v2Client},
-		Webhooks:      &WebhooksClient{v2Client: v2Client},
+		Version:            version,
+		Analytics:          &AnalyticsClient{v2Client: v2Client},
+		Channels:           channelsClient,
+		DRMPolicies:        &DRMPoliciesClient{v2Client: v2Client},
+		Imports:            &ImportsClient{v2Client: v2Client},
+		Media:              &MediaClient{v2Client: v2Client},
+		PlayerBidding:      &PlayerBiddingClient{v2Client: v2Client},
+		Webhooks:           &WebhooksClient{v2Client: v2Client},
+		SiteProtectionRule: &SiteProtectionRuleClient{v2Client: v2Client},
 	}
 }
 
