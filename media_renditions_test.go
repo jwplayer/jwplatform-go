@@ -155,5 +155,4 @@ func TestUnmarshalMediaRendition(t *testing.T) {
 	assert.Equal(t, 320, mediaRendition.Width)
 	assert.Equal(t, "ready", mediaRendition.Status)
 	assert.Equal(t, "video", mediaRendition.MediaType)
-	// assert.Equal(t, "abqds9lq", mediaRendition.Relationships["media_rendition_template"]["id"])
 }
