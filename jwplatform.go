@@ -49,6 +49,7 @@ type JWPlatform struct {
 	Media         *MediaClient
 	PlayerBidding *PlayerBiddingClient
 	Webhooks      *WebhooksClient
+	Thumbnails    *ThumbnailsClient
 }
 
 // New generates an authenticated client for interacting with JW Player V2 Platform APIs.
@@ -64,6 +65,7 @@ func New(apiSecret string) *JWPlatform {
 		Media:         &MediaClient{v2Client: v2Client},
 		PlayerBidding: &PlayerBiddingClient{v2Client: v2Client},
 		Webhooks:      &WebhooksClient{v2Client: v2Client},
+		Thumbnails:    &ThumbnailsClient{v2Client: v2Client},
 	}
 }
 
