@@ -17,7 +17,7 @@ func TestGetPlayerBidding(t *testing.T) {
 	playerBiddingConfigID := "mnbvcxkj"
 	mockAuthToken := "shhh"
 
-	requestPath := fmt.Sprintf("/v2/sites/%s/player_bidding_configs/%s", siteID, playerBiddingConfigID)
+	requestPath := fmt.Sprintf("/v2/sites/%s/advertising/player_bidding_configs/%s", siteID, playerBiddingConfigID)
 	mockPlayerBiddingResponse := map[string]string{"id": playerBiddingConfigID}
 
 	gock.New("https://api.jwplayer.com").
@@ -40,7 +40,7 @@ func TestDeletePlayerBidding(t *testing.T) {
 	playerBiddingConfigID := "mnbvcxkj"
 	mockAuthToken := "shhh"
 
-	requestPath := fmt.Sprintf("/v2/sites/%s/player_bidding_configs/%s", siteID, playerBiddingConfigID)
+	requestPath := fmt.Sprintf("/v2/sites/%s/advertising/player_bidding_configs/%s", siteID, playerBiddingConfigID)
 
 	gock.New("https://api.jwplayer.com").
 		Delete(requestPath).
@@ -60,7 +60,7 @@ func TestCreatePlayerBidding(t *testing.T) {
 	playerBiddingConfigID := "mnbvcxkj"
 	mockAuthToken := "shhh"
 
-	requestPath := fmt.Sprintf("/v2/sites/%s/player_bidding_configs", siteID)
+	requestPath := fmt.Sprintf("/v2/sites/%s/advertising/player_bidding_configs", siteID)
 	mockPlayerBiddingResponse := map[string]string{"id": playerBiddingConfigID}
 
 	gock.New("https://api.jwplayer.com").
@@ -84,7 +84,7 @@ func TestUpdatePlayerBidding(t *testing.T) {
 	playerBiddingConfigID := "mnbvcxkj"
 	mockAuthToken := "shhh"
 
-	requestPath := fmt.Sprintf("/v2/sites/%s/player_bidding_configs/%s", siteID, playerBiddingConfigID)
+	requestPath := fmt.Sprintf("/v2/sites/%s/advertising/player_bidding_configs/%s", siteID, playerBiddingConfigID)
 	mockPlayerBiddingResponse := map[string]string{"id": playerBiddingConfigID}
 
 	gock.New("https://api.jwplayer.com").
@@ -110,7 +110,7 @@ func TestListPlayerBidding(t *testing.T) {
 	page := 2
 	pageLength := 4
 
-	requestPath := fmt.Sprintf("/v2/sites/%s/player_bidding_configs", siteID)
+	requestPath := fmt.Sprintf("/v2/sites/%s/advertising/player_bidding_configs", siteID)
 	mockPlayerBiddingResponse := map[string]interface{}{
 		"page_length":            pageLength,
 		"page":                   page,

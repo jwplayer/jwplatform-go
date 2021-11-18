@@ -91,9 +91,9 @@ type PlayerBiddingClient struct {
 }
 
 // Get a single Player Bidding Configuration resource by ID.
-func (c *PlayerBiddingClient) Get(siteID, importID string) (*PlayerBiddingConfigurationResource, error) {
+func (c *PlayerBiddingClient) Get(siteID, configID string) (*PlayerBiddingConfigurationResource, error) {
 	playerBiddingConfig := &PlayerBiddingConfigurationResource{}
-	path := fmt.Sprintf("/v2/sites/%s/player_bidding_configs/%s", siteID, importID)
+	path := fmt.Sprintf("/v2/sites/%s/advertising/player_bidding_configs/%s", siteID, configID)
 	err := c.v2Client.Request(http.MethodGet, path, playerBiddingConfig, nil, nil)
 	return playerBiddingConfig, err
 }
@@ -102,7 +102,7 @@ func (c *PlayerBiddingClient) Get(siteID, importID string) (*PlayerBiddingConfig
 func (c *PlayerBiddingClient) Create(siteID string, PlayerBiddingConfigurationMetadata *PlayerBiddingConfigurationMetadata) (*PlayerBiddingConfigurationResource, error) {
 	createRequestData := &PlayerBiddingWriteRequest{Metadata: *PlayerBiddingConfigurationMetadata}
 	playerBiddingConfig := &PlayerBiddingConfigurationResource{}
-	path := fmt.Sprintf("/v2/sites/%s/player_bidding_configs", siteID)
+	path := fmt.Sprintf("/v2/sites/%s/advertising/player_bidding_configs", siteID)
 	err := c.v2Client.Request(http.MethodPost, path, playerBiddingConfig, createRequestData, nil)
 	return playerBiddingConfig, err
 }
@@ -110,24 +110,24 @@ func (c *PlayerBiddingClient) Create(siteID string, PlayerBiddingConfigurationMe
 // List all Player Bidding Configuration resources associated with a given Site ID.
 func (c *PlayerBiddingClient) List(siteID string, queryParams *QueryParams) (*PlayerBiddingConfigurationResourcesResponse, error) {
 	playerBiddingConfigs := &PlayerBiddingConfigurationResourcesResponse{}
-	path := fmt.Sprintf("/v2/sites/%s/player_bidding_configs", siteID)
+	path := fmt.Sprintf("/v2/sites/%s/advertising/player_bidding_configs", siteID)
 	urlValues, _ := query.Values(queryParams)
 	err := c.v2Client.Request(http.MethodGet, path, playerBiddingConfigs, nil, urlValues)
 	return playerBiddingConfigs, err
 }
 
 // Update a Player Bidding Configuration resource by ID.
-func (c *PlayerBiddingClient) Update(siteID, importID string, PlayerBiddingConfigurationMetadata *PlayerBiddingConfigurationMetadata) (*PlayerBiddingConfigurationResource, error) {
+func (c *PlayerBiddingClient) Update(siteID, configID string, PlayerBiddingConfigurationMetadata *PlayerBiddingConfigurationMetadata) (*PlayerBiddingConfigurationResource, error) {
 	updateRequestData := &PlayerBiddingWriteRequest{Metadata: *PlayerBiddingConfigurationMetadata}
 	playerBiddingConfig := &PlayerBiddingConfigurationResource{}
-	path := fmt.Sprintf("/v2/sites/%s/player_bidding_configs/%s", siteID, importID)
+	path := fmt.Sprintf("/v2/sites/%s/advertising/player_bidding_configs/%s", siteID, configID)
 	err := c.v2Client.Request(http.MethodPatch, path, playerBiddingConfig, updateRequestData, nil)
 	return playerBiddingConfig, err
 }
 
 // Delete a Player Bidding Configuration resource by ID.
-func (c *PlayerBiddingClient) Delete(siteID, importID string) error {
-	path := fmt.Sprintf("/v2/sites/%s/player_bidding_configs/%s", siteID, importID)
+func (c *PlayerBiddingClient) Delete(siteID, configID string) error {
+	path := fmt.Sprintf("/v2/sites/%s/advertising/player_bidding_configs/%s", siteID, configID)
 	err := c.v2Client.Request(http.MethodDelete, path, nil, nil, nil)
 	return err
 }
