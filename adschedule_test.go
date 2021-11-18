@@ -135,6 +135,27 @@ func TestListAdSchedules(t *testing.T) {
 	assert.Equal(t, nil, err)
 }
 
+func TestUpdateSchedulesPlayerBiddingConfigs(t *testing.T) {
+	defer gock.Off()
+
+	siteID := "abcdefgh"
+	scheduleID := "mnbvcxkj"
+	mockAuthToken := "shhh"
+
+	requestPath := fmt.Sprintf("/v2/sites/%s/advertising/update_schedules_player_bidding_configs", siteID)
+
+	gock.New("https://api.jwplayer.com").
+		Put(requestPath).
+		MatchHeader("Authorization", "^Bearer .+").
+		MatchHeader("User-Agent", "^jwplatform-go/+").
+		Reply(204)
+
+	testClient := New(mockAuthToken)
+	updateRequest := &UpdateSchedulesPlayerBiddingConfigsRequest{ScheduleIDs: []string{scheduleID}}
+	err := testClient.AdSchedules.UpdateSchedulesPlayerBiddingConfigs(siteID, updateRequest)
+	assert.Equal(t, nil, err)
+}
+
 func TestUnmarshalAdSchdule(t *testing.T) {
 	scheduleData := map[string]interface{}{
 		"created":       "2021-11-17T16:54:39.487381+00:00",

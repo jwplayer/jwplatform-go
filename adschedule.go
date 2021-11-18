@@ -45,6 +45,10 @@ type AdScheduleWriteRequest struct {
 	Metadata AdScheduleMetadata `json:"metadata"`
 }
 
+type UpdateSchedulesPlayerBiddingConfigsRequest struct {
+	ScheduleIDs []string `json:"schedule_ids"`
+}
+
 type AdScheduleClient struct {
 	v2Client *V2Client
 }
@@ -83,5 +87,11 @@ func (c *AdScheduleClient) Update(siteID, scheduleID string, metadata *AdSchedul
 func (c *AdScheduleClient) Delete(siteID, scheduleID string) error {
 	path := fmt.Sprintf("/v2/sites/%s/advertising/schedules/%s", siteID, scheduleID)
 	err := c.v2Client.Request(http.MethodDelete, path, nil, nil, nil)
+	return err
+}
+
+func (c *AdScheduleClient) UpdateSchedulesPlayerBiddingConfigs(siteID string, updateRequest *UpdateSchedulesPlayerBiddingConfigsRequest) error {
+	path := fmt.Sprintf("/v2/sites/%s/advertising/update_schedules_player_bidding_configs", siteID)
+	err := c.v2Client.Request(http.MethodPut, path, nil, updateRequest, nil)
 	return err
 }
