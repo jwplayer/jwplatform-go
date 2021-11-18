@@ -17,7 +17,7 @@ func TestGetPlayerBidding(t *testing.T) {
 	playerBiddingConfigID := "mnbvcxkj"
 	mockAuthToken := "shhh"
 
-	requestPath := fmt.Sprintf("/v2/sites/%s/vpb_configs/%s", siteID, playerBiddingConfigID)
+	requestPath := fmt.Sprintf("/v2/sites/%s/player_bidding_configs/%s", siteID, playerBiddingConfigID)
 	mockPlayerBiddingResponse := map[string]string{"id": playerBiddingConfigID}
 
 	gock.New("https://api.jwplayer.com").
@@ -40,7 +40,7 @@ func TestDeletePlayerBidding(t *testing.T) {
 	playerBiddingConfigID := "mnbvcxkj"
 	mockAuthToken := "shhh"
 
-	requestPath := fmt.Sprintf("/v2/sites/%s/vpb_configs/%s", siteID, playerBiddingConfigID)
+	requestPath := fmt.Sprintf("/v2/sites/%s/player_bidding_configs/%s", siteID, playerBiddingConfigID)
 
 	gock.New("https://api.jwplayer.com").
 		Delete(requestPath).
@@ -60,7 +60,7 @@ func TestCreatePlayerBidding(t *testing.T) {
 	playerBiddingConfigID := "mnbvcxkj"
 	mockAuthToken := "shhh"
 
-	requestPath := fmt.Sprintf("/v2/sites/%s/vpb_configs", siteID)
+	requestPath := fmt.Sprintf("/v2/sites/%s/player_bidding_configs", siteID)
 	mockPlayerBiddingResponse := map[string]string{"id": playerBiddingConfigID}
 
 	gock.New("https://api.jwplayer.com").
@@ -84,7 +84,7 @@ func TestUpdatePlayerBidding(t *testing.T) {
 	playerBiddingConfigID := "mnbvcxkj"
 	mockAuthToken := "shhh"
 
-	requestPath := fmt.Sprintf("/v2/sites/%s/vpb_configs/%s", siteID, playerBiddingConfigID)
+	requestPath := fmt.Sprintf("/v2/sites/%s/player_bidding_configs/%s", siteID, playerBiddingConfigID)
 	mockPlayerBiddingResponse := map[string]string{"id": playerBiddingConfigID}
 
 	gock.New("https://api.jwplayer.com").
@@ -110,11 +110,11 @@ func TestListPlayerBidding(t *testing.T) {
 	page := 2
 	pageLength := 4
 
-	requestPath := fmt.Sprintf("/v2/sites/%s/vpb_configs", siteID)
+	requestPath := fmt.Sprintf("/v2/sites/%s/player_bidding_configs", siteID)
 	mockPlayerBiddingResponse := map[string]interface{}{
-		"page_length": pageLength,
-		"page":        page,
-		"vpb_configs": []map[string]string{{"id": playerBiddingConfigID}},
+		"page_length":            pageLength,
+		"page":                   page,
+		"player_bidding_configs": []map[string]string{{"id": playerBiddingConfigID}},
 	}
 
 	gock.New("https://api.jwplayer.com").
@@ -138,7 +138,7 @@ func TestListPlayerBidding(t *testing.T) {
 func TestUnmarshalPlayerBiddingConfig(t *testing.T) {
 	playerBiddingConfigData := map[string]interface{}{
 		"id":            "abZqokMz",
-		"type":          "vpb_config",
+		"type":          "player_bidding_config",
 		"created":       "2019-09-25T15:29:11.042095+00:00",
 		"last_modified": "2019-09-25T15:29:11.042095+00:00",
 		"metadata": map[string]interface{}{
@@ -152,6 +152,39 @@ func TestUnmarshalPlayerBiddingConfig(t *testing.T) {
 							"min":       5.00,
 							"max":       5.50,
 							"increment": 0.10,
+						},
+					},
+					"consentManagement": map[string]interface{}{
+						"gdpr": map[string]interface{}{
+							"allowAuctionWithoutConsent": nil,
+							"cmpApi":                     "iab",
+							"defaultGdprScope":           false,
+							"rules": []interface{}{
+								map[string]interface{}{
+									"enforcePurpose": true,
+									"enforceVendor":  true,
+									"purpose":        "storage",
+								},
+								map[string]interface{}{
+									"enforcePurpose": true,
+									"enforceVendor":  true,
+									"purpose":        "basicAds",
+									"vendorExceptions": []string{
+										"MediaGrid",
+										"SpotX",
+									},
+								},
+								map[string]interface{}{
+									"enforcePurpose": true,
+									"enforceVendor":  true,
+									"purpose":        "measurement",
+								},
+							},
+							"timeout": 10000,
+						},
+						"usp": map[string]interface{}{
+							"cmpApi":  "iab",
+							"timeout": 10000,
 						},
 					},
 				},
@@ -177,7 +210,7 @@ func TestUnmarshalPlayerBiddingConfig(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, "abZqokMz", playerBiddingConfig.ID)
-	assert.Equal(t, "vpb_config", playerBiddingConfig.Type)
+	assert.Equal(t, "player_bidding_config", playerBiddingConfig.Type)
 	assert.Equal(t, "2019-09-25T15:29:11.042095+00:00", playerBiddingConfig.Created)
 	assert.Equal(t, "2019-09-25T15:29:11.042095+00:00", playerBiddingConfig.LastModified)
 

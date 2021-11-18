@@ -27,10 +27,11 @@ type BidsMetadata struct {
 
 // BidSettingsMetadata represents the configuration for the player bidding plugin
 type BidSettingsMetadata struct {
-	BidTimeout             int      `json:"bidTimeout"`
-	FloorPriceCents        int      `json:"floorPriceCents"`
-	MediationLayerAdServer string   `json:"mediationLayerAdServer"`
-	Buckets                []Bucket `json:"buckets"`
+	BidTimeout             int               `json:"bidTimeout"`
+	FloorPriceCents        int               `json:"floorPriceCents"`
+	MediationLayerAdServer string            `json:"mediationLayerAdServer"`
+	Buckets                []Bucket          `json:"buckets"`
+	ConsentManagement      ConsentManagement `json:"consentManagement"`
 }
 
 // Bucket represents a minimum, maximum value to which to apply an increment
@@ -48,6 +49,31 @@ type BiddersMetadata struct {
 	CustomParams map[string]string `json:"custom_params"`
 }
 
+type ConsentManagement struct {
+	GDPR GDPRModule `json:"gdpr"`
+	USP  USPModule  `json:"usp"`
+}
+
+type GDPRModule struct {
+	CMPAPI                     string     `json:"cmpApi"`
+	Timeout                    int        `json:"timeout"`
+	DefaultGDPRScope           bool       `json:"defaultGdprScope"`
+	Rules                      []GDPRRule `json:"rules"`
+	AllowAuctionWithoutConsent bool       `json:"allowAuctionWithoutConsent"`
+}
+
+type GDPRRule struct {
+	Purpose          string   `json:"purpose"`
+	EnforcePurpose   bool     `json:"enforcePurpose"`
+	EnforceVendor    bool     `json:"enforceVendor"`
+	VendorExceptions []string `json:"vendorExceptions"`
+}
+
+type USPModule struct {
+	CMPAPI  string `json:"cmpApi"`
+	timeout int    `json:"timeout"`
+}
+
 // PlayerBiddingWriteRequest is the request structure required for Player Bidding Configuration create and update calls.
 type PlayerBiddingWriteRequest struct {
 	Metadata PlayerBiddingConfigurationMetadata `json:"metadata"`
@@ -56,7 +82,7 @@ type PlayerBiddingWriteRequest struct {
 // PlayerBiddingConfigurationResourcesResponse is the response structure for Player Bidding Configuration list calls.
 type PlayerBiddingConfigurationResourcesResponse struct {
 	V2ResourcesResponse
-	PlayerBiddingConfigs []PlayerBiddingConfigurationResource `json:"vpb_configs"`
+	PlayerBiddingConfigs []PlayerBiddingConfigurationResource `json:"player_bidding_configs"`
 }
 
 // PlayerBiddingClient for interacting with V2 Player Bidding Configurations API.
@@ -67,7 +93,7 @@ type PlayerBiddingClient struct {
 // Get a single Player Bidding Configuration resource by ID.
 func (c *PlayerBiddingClient) Get(siteID, importID string) (*PlayerBiddingConfigurationResource, error) {
 	playerBiddingConfig := &PlayerBiddingConfigurationResource{}
-	path := fmt.Sprintf("/v2/sites/%s/vpb_configs/%s", siteID, importID)
+	path := fmt.Sprintf("/v2/sites/%s/player_bidding_configs/%s", siteID, importID)
 	err := c.v2Client.Request(http.MethodGet, path, playerBiddingConfig, nil, nil)
 	return playerBiddingConfig, err
 }
@@ -76,7 +102,7 @@ func (c *PlayerBiddingClient) Get(siteID, importID string) (*PlayerBiddingConfig
 func (c *PlayerBiddingClient) Create(siteID string, PlayerBiddingConfigurationMetadata *PlayerBiddingConfigurationMetadata) (*PlayerBiddingConfigurationResource, error) {
 	createRequestData := &PlayerBiddingWriteRequest{Metadata: *PlayerBiddingConfigurationMetadata}
 	playerBiddingConfig := &PlayerBiddingConfigurationResource{}
-	path := fmt.Sprintf("/v2/sites/%s/vpb_configs", siteID)
+	path := fmt.Sprintf("/v2/sites/%s/player_bidding_configs", siteID)
 	err := c.v2Client.Request(http.MethodPost, path, playerBiddingConfig, createRequestData, nil)
 	return playerBiddingConfig, err
 }
@@ -84,7 +110,7 @@ func (c *PlayerBiddingClient) Create(siteID string, PlayerBiddingConfigurationMe
 // List all Player Bidding Configuration resources associated with a given Site ID.
 func (c *PlayerBiddingClient) List(siteID string, queryParams *QueryParams) (*PlayerBiddingConfigurationResourcesResponse, error) {
 	playerBiddingConfigs := &PlayerBiddingConfigurationResourcesResponse{}
-	path := fmt.Sprintf("/v2/sites/%s/vpb_configs", siteID)
+	path := fmt.Sprintf("/v2/sites/%s/player_bidding_configs", siteID)
 	urlValues, _ := query.Values(queryParams)
 	err := c.v2Client.Request(http.MethodGet, path, playerBiddingConfigs, nil, urlValues)
 	return playerBiddingConfigs, err
@@ -94,14 +120,14 @@ func (c *PlayerBiddingClient) List(siteID string, queryParams *QueryParams) (*Pl
 func (c *PlayerBiddingClient) Update(siteID, importID string, PlayerBiddingConfigurationMetadata *PlayerBiddingConfigurationMetadata) (*PlayerBiddingConfigurationResource, error) {
 	updateRequestData := &PlayerBiddingWriteRequest{Metadata: *PlayerBiddingConfigurationMetadata}
 	playerBiddingConfig := &PlayerBiddingConfigurationResource{}
-	path := fmt.Sprintf("/v2/sites/%s/vpb_configs/%s", siteID, importID)
+	path := fmt.Sprintf("/v2/sites/%s/player_bidding_configs/%s", siteID, importID)
 	err := c.v2Client.Request(http.MethodPatch, path, playerBiddingConfig, updateRequestData, nil)
 	return playerBiddingConfig, err
 }
 
 // Delete a Player Bidding Configuration resource by ID.
 func (c *PlayerBiddingClient) Delete(siteID, importID string) error {
-	path := fmt.Sprintf("/v2/sites/%s/vpb_configs/%s", siteID, importID)
+	path := fmt.Sprintf("/v2/sites/%s/player_bidding_configs/%s", siteID, importID)
 	err := c.v2Client.Request(http.MethodDelete, path, nil, nil, nil)
 	return err
 }
