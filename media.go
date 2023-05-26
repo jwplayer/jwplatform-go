@@ -63,13 +63,16 @@ type UpdateMediaRequest struct {
 //
 // Direct uploads can be used for assets up to 5GB.
 //
-// MimeType and SourceURL are required only for "direct" and "fetch", respectively.
+// MimeType and SourceURL are required only for "external"
+//
+// MimeType and DownloadURL are required for "fetch", respectively.
 //
 // TrimInPoint and TrimOutPoint cannot be specified for "external".
 type Upload struct {
 	Method       string `json:"method,omitempty"`
 	MimeType     string `json:"mime_type,omitempty"`
 	SourceURL    string `json:"source_url,omitempty"`
+	DownloadURL  string `json:"download_url,omitempty"`
 	TrimInPoint  string `json:"trim_in_point,omitempty"`
 	TrimOutPoint string `json:"trim_out_point,omitempty"`
 }
