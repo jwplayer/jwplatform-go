@@ -71,8 +71,10 @@ func TestCreateMedia(t *testing.T) {
 		JSON(mockMediaResponse)
 
 	testClient := New(mockAuthToken)
-	newMedia := &MediaMetadata{Title: "Another test video"}
-	media, err := testClient.Media.Create(siteID, newMedia)
+	createMediaRequest := CreateMediaRequest{
+		Metadata: MediaMetadata{Title: "Another test video"},
+	}
+	media, err := testClient.Media.Create(siteID, &createMediaRequest)
 	assert.Equal(t, mediaID, media.ID)
 	assert.Equal(t, nil, err)
 }

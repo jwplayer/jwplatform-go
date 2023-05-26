@@ -108,11 +108,10 @@ func (c *MediaClient) Get(siteID, mediaID string) (*MediaResource, error) {
 }
 
 // Create a Media resource.
-func (c *MediaClient) Create(siteID string, mediaMetadata *MediaMetadata) (*CreateMediaResponse, error) {
-	createRequestData := &CreateMediaRequest{Metadata: *mediaMetadata}
+func (c *MediaClient) Create(siteID string, createMediaRequest *CreateMediaRequest) (*CreateMediaResponse, error) {
 	media := &CreateMediaResponse{}
 	path := fmt.Sprintf("/v2/sites/%s/media", siteID)
-	err := c.v2Client.Request(http.MethodPost, path, media, createRequestData, nil)
+	err := c.v2Client.Request(http.MethodPost, path, media, createMediaRequest, nil)
 	return media, err
 }
 
